@@ -5,7 +5,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.android.photocaptureviewer.R;
-import com.android.photocaptureviewer.utils.ImageUtils;
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -25,7 +25,8 @@ public class ImagePreviewActivity extends AppCompatActivity {
         }
         String path = getIntent().getStringExtra(IMAGE_PATH);
         ImageView previewImage = findViewById(R.id.preview_img);
-        previewImage.setImageBitmap(ImageUtils.getImageBitmap(this, path));
+        //previewImage.setImageBitmap(ImageUtils.getImageBitmap(this, path));
+        Picasso.with(this).load("file://"+path).into(previewImage);
     }
 
     @Override

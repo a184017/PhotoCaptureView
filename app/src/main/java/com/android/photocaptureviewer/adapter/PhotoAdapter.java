@@ -2,8 +2,6 @@ package com.android.photocaptureviewer.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +13,7 @@ import com.android.photocaptureviewer.activity.ImagePreviewActivity;
 import com.android.photocaptureviewer.data.ImageFolder;
 import com.android.photocaptureviewer.data.ImageItem;
 import com.android.photocaptureviewer.utils.ImageTimeUtils;
-import com.android.photocaptureviewer.utils.ImageUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -24,10 +22,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder> {
     private List<ImageItem> mImageItems;
-    private Activity activity;
+    private Activity mActivity;
 
     public PhotoAdapter(Activity activity) {
-        this.activity = activity;
+        this.mActivity = activity;
     }
 
     @NonNull
@@ -43,18 +41,19 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
         final ImageItem imageItem = mImageItems.get(position);
         holder.date.setText(ImageTimeUtils.timeStamp2Date(imageItem.time * 1000, null));
         holder.name.setText(imageItem.name);
-        Bitmap bitmap = ImageUtils.getImageBitmap(activity, imageItem.path);
-        Bitmap thumbnailBitmap = ThumbnailUtils.extractThumbnail(bitmap, 160, 160);
-        if (bitmap != thumbnailBitmap && (!bitmap.isRecycled())) {
-            bitmap.recycle();
-        }
-        holder.thumbnail.setImageBitmap(thumbnailBitmap);
+//        Bitmap bitmap = ImageUtils.getImageBitmap(activity, imageItem.path);
+//        Bitmap thumbnailBitmap = ThumbnailUtils.extractThumbnail(bitmap, 160, 160);
+//        if (bitmap != thumbnailBitmap && (!bitmap.isRecycled())) {
+//            bitmap.recycle();
+//        }
+//        holder.thumbnail.setImageBitmap(thumbnailBitmap);
+        Picasso.with(mActivity).load("file://"+imageItem.path).into(holder.thumbnail);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity, ImagePreviewActivity.class);
+                Intent intent = new Intent(mActivity, ImagePreviewActivity.class);
                 intent.putExtra(ImagePreviewActivity.IMAGE_PATH, imageItem.path);
-                activity.startActivity(intent);
+                mActivity.startActivity(intent);
             }
         });
     }
